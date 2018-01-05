@@ -7,21 +7,16 @@ using System.Linq;
 
 namespace Auth0Authorization
 {
-    public class AuthorizationService
-    {
-        private Dictionary<string, string[]> _scopePolicies;
-        public AuthorizationService(Dictionary<string,string[]> scopePolicies)
-        {
-            _scopePolicies = scopePolicies;
-        }
-        public void AddAuthorizationPolicies(IServiceCollection services, string authorityDomain, bool isAuthRequired = false)
+    public static class AuthorizationService
+    {        
+        public static void AddAuthorizationPolicies(this IServiceCollection services, string authorityDomain, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
         {
             services.AddAuthorization(options =>
             {
                 var authDomainUrl = authorityDomain + ((authorityDomain[authorityDomain.Length-1]=='/') ? "" : "/");
                 if (isAuthRequired)
                 {   
-                    foreach(KeyValuePair<string,string[]> policyPermissions in _scopePolicies)
+                    foreach(KeyValuePair<string,string[]> policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key,
                             policy => policy.Requirements.Add(new IntersectionPermissions(policyPermissions.Value,
@@ -33,7 +28,7 @@ namespace Auth0Authorization
                 {
                     // Choose which policy to passthrough when authentication is not required.
                     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAssertion(_ => true).Build();
-                    foreach (KeyValuePair<string, string[]> policyPermissions in _scopePolicies)
+                    foreach (KeyValuePair<string, string[]> policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key, options.DefaultPolicy);
                         
