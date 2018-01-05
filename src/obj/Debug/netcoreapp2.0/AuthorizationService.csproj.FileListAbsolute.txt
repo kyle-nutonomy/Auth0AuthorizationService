@@ -1,0 +1,8 @@
+/home/may/Auth0Authorization/src/obj/Debug/netcoreapp2.0/AuthorizationService.csproj.CoreCompileInputs.cache
+/home/may/Auth0Authorization/src/obj/Debug/netcoreapp2.0/AuthorizationService.AssemblyInfoInputs.cache
+/home/may/Auth0Authorization/src/obj/Debug/netcoreapp2.0/AuthorizationService.AssemblyInfo.cs
+/home/may/Auth0Authorization/src/bin/Debug/netcoreapp2.0/AuthorizationService.deps.json
+/home/may/Auth0Authorization/src/bin/Debug/netcoreapp2.0/AuthorizationService.dll
+/home/may/Auth0Authorization/src/bin/Debug/netcoreapp2.0/AuthorizationService.pdb
+/home/may/Auth0Authorization/src/obj/Debug/netcoreapp2.0/AuthorizationService.dll
+/home/may/Auth0Authorization/src/obj/Debug/netcoreapp2.0/AuthorizationService.pdb
