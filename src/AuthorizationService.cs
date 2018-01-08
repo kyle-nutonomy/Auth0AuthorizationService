@@ -14,7 +14,6 @@ namespace Auth0Authorization
         public static void ConfigureAuth(this IServiceCollection services, string authorityDomain, string apiIdentifier)
         {
             var authDomainUrl = CheckUrl(authorityDomain);
-            var apiIdUrl = CheckUrl(apiIdentifier);
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -23,7 +22,7 @@ namespace Auth0Authorization
                 .AddJwtBearer(options =>
                 {
                     options.Authority = authDomainUrl;
-                    options.Audience = apiIdUrl;
+                    options.Audience = apiIdentifier;
                 });
         }     
         public static void AddAuthorizationPolicies(this IServiceCollection services, string authorityDomain, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
