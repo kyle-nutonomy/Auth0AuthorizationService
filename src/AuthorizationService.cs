@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
-using Newtonsoft.Json;
+
 namespace Auth0Authorization
 {
     public static class AuthorizationService

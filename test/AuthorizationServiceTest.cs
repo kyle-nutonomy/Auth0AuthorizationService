@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using Xunit;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Auth0Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Moq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Auth0AuthorizationTest
