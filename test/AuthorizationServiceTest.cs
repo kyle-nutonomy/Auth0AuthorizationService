@@ -7,12 +7,26 @@ using Auth0Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Moq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Auth0AuthorizationTest
 {
     public class AuthorizationServiceTest
     {
-        private readonly AuthorizationService _authorizationService;
+        private readonly Dictionary<string,string[]> _scopePolicies;
+        private readonly string _domainUrl;
+        private readonly string _apiIdentifier;
+        private readonly bool _isAuthRequired;
+
+        private IAuthorizationService BuildAuthorizationService(Action<IServiceCollection> setupServices = null)
+         {
+             var services = new ServiceCollection();
+             services.AddAuthorization();
+             services.AddLogging();
+             services.AddOptions();
+             setupServices?.Invoke(services);
+             return services.BuildServiceProvider().GetRequiredService<IAuthorizationService>();
+        }
 
         public AuthorizationServiceTest()
         {
@@ -22,20 +36,81 @@ namespace Auth0AuthorizationTest
                 { "Write", new string[] { "write:messages" } },
                 { "Admin", new string[] { "read:messages", "write:messages" } }
             };
-            _authorizationService = new AuthorizationService(scopePolicies);
+            _scopePolicies = scopePolicies;
+            _domainUrl = "http://test-domain.com";
+            _apiIdentifier = "http://test-API.com";
+            _isAuthRequired = true;
         }
 
         [Fact]
-        public async Task AllowedUser()
+        public async Task AllowedPermissionIfUserContainsClaim()
         {
-            _authorizationService.AddAuthorizationPolicies(,"",false);
+            var authorizationService = BuildAuthorizationService(services => 
+            {
+                services.ConfigureAuth(_domainUrl,_apiIdentifier);
+                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+            });
+
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
-                    new Claim[] { new Claim("Read", "read:messages") }
+                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.CheckUrl(_domainUrl)) }
                 )
             );
-            var allowed = await authService.AuthorizeAsync(user, "Basic");
-            Assert.True(allowed);
+            var allowed = await authorizationService.AuthorizeAsync(user, "Read");
+            Assert.True(allowed.Succeeded);
+        } 
+
+        [Fact]
+        public async Task DenyPermissionIfUserContainsWrongClaim()
+        {
+            var authorizationService = BuildAuthorizationService(services => 
+            {
+                services.ConfigureAuth(_domainUrl,_apiIdentifier);
+                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+            });
+
+            var user = new ClaimsPrincipal(
+                new ClaimsIdentity(
+                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.CheckUrl(_domainUrl)) }
+                )
+            );
+            var writeAllowed = await authorizationService.AuthorizeAsync(user, "Write");
+            Assert.False(writeAllowed.Succeeded);
+            var adminAllowed = await authorizationService.AuthorizeAsync(user, "Admin");
+            Assert.False(adminAllowed.Succeeded);
+        }
+
+        [Fact]
+        public async Task AllowPermissionsIfUserSatisfiesMultipleScopes()
+        {
+            var authorizationService = BuildAuthorizationService(services => 
+            {
+                services.ConfigureAuth(_domainUrl,_apiIdentifier);
+                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+            });
+
+            var user = new ClaimsPrincipal(
+                new ClaimsIdentity(
+                    new Claim[] { 
+                        new Claim("scope", "read:messages write:messages", null, AuthorizationService.CheckUrl(_domainUrl)),
+                    }
+                )
+            );
+            var writeAllowed = await authorizationService.AuthorizeAsync(user, "Write");
+            Assert.True(writeAllowed.Succeeded);
+            var readAllowed = await authorizationService.AuthorizeAsync(user, "Read");
+            Assert.True(readAllowed.Succeeded);
+            var adminAllowed = await authorizationService.AuthorizeAsync(user, "Admin");
+            Assert.True(adminAllowed.Succeeded);
+        }
+
+        [Fact]
+        public void ProperUrl()
+        {
+            var urlWithBackSlash = AuthorizationService.CheckUrl("http://test.com/");
+            var urlWithout = AuthorizationService.CheckUrl("http://test.com");
+            Assert.Equal("http://test.com/", urlWithBackSlash);
+            Assert.Equal("http://test.com/", urlWithout);
         }
     }
 }
