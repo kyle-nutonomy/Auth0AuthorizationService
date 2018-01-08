@@ -12610,7 +12610,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "/home/may/Auth0Authorization/src/AuthorizationService.csproj",
-      "projectName": "AuthorizationService",
+      "projectName": "Nutonomy.Auth0AuthorizationService",
       "projectPath": "/home/may/Auth0Authorization/src/AuthorizationService.csproj",
       "packagesPath": "/home/may/.nuget/packages/",
       "outputPath": "/home/may/Auth0Authorization/src/obj/",

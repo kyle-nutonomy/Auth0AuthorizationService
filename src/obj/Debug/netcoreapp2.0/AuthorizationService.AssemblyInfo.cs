@@ -7,8 +7,10 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("AuthorizationService")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Nutonomy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright 2017 (c) nuTonomy. All rights reserved.")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("Authorization Service for configuring Auth")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuthorizationService")]
