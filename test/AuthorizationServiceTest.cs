@@ -51,7 +51,7 @@ namespace Auth0AuthorizationTest
 
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
-                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.CheckUrl(_domainUrl)) }
+                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.FormatUrl(_domainUrl)) }
                 )
             );
             var allowed = await authorizationService.AuthorizeAsync(user, "Read");
@@ -69,7 +69,7 @@ namespace Auth0AuthorizationTest
 
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
-                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.CheckUrl(_domainUrl)) }
+                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.FormatUrl(_domainUrl)) }
                 )
             );
             var writeAllowed = await authorizationService.AuthorizeAsync(user, "Write");
@@ -90,7 +90,7 @@ namespace Auth0AuthorizationTest
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
                     new Claim[] { 
-                        new Claim("scope", "read:messages write:messages", null, AuthorizationService.CheckUrl(_domainUrl)),
+                        new Claim("scope", "read:messages write:messages", null, AuthorizationService.FormatUrl(_domainUrl)),
                     }
                 )
             );
@@ -105,8 +105,8 @@ namespace Auth0AuthorizationTest
         [Fact]
         public void ProperUrl()
         {
-            var urlWithBackSlash = AuthorizationService.CheckUrl("http://test.com/");
-            var urlWithout = AuthorizationService.CheckUrl("http://test.com");
+            var urlWithBackSlash = AuthorizationService.FormatUrl("http://test.com/");
+            var urlWithout = AuthorizationService.FormatUrl("http://test.com");
             Assert.Equal("http://test.com/", urlWithBackSlash);
             Assert.Equal("http://test.com/", urlWithout);
         }

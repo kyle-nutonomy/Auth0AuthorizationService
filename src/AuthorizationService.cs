@@ -13,7 +13,7 @@ namespace Auth0Authorization
     {   
         public static void ConfigureAuth(this IServiceCollection services, string authorityDomain, string apiIdentifier)
         {
-            var authDomainUrl = CheckUrl(authorityDomain);
+            var authDomainUrl = FormatUrl(authorityDomain);
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,7 +29,7 @@ namespace Auth0Authorization
         {
             services.AddAuthorization(options =>
             {
-                var authDomainUrl = CheckUrl(authorityDomain);
+                var authDomainUrl = FormatUrl(authorityDomain);
                 if (isAuthRequired)
                 {   
                     foreach(KeyValuePair<string,string[]> policyPermissions in scopePolicies)
@@ -87,7 +87,7 @@ namespace Auth0Authorization
             }
         }
 
-        public static string CheckUrl(string url)
+        public static string FormatUrl(string url)
         {
             return url + ((url[url.Length - 1] == '/') ? "" : "/");
         }
