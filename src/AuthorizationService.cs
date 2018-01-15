@@ -11,7 +11,7 @@ namespace Auth0Authorization
 {
     public static class AuthorizationService
     {   
-        public static void ConfigureAuth(this IServiceCollection services, string authorityDomain, string apiIdentifier)
+        public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain, string apiIdentifier, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
         {
             var authDomainUrl = FormatUrl(authorityDomain);
             services.AddAuthentication(options =>
@@ -24,15 +24,11 @@ namespace Auth0Authorization
                     options.Authority = authDomainUrl;
                     options.Audience = apiIdentifier;
                 });
-        }     
-        public static void AddAuthorizationPolicies(this IServiceCollection services, string authorityDomain, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
-        {
             services.AddAuthorization(options =>
             {
-                var authDomainUrl = FormatUrl(authorityDomain);
                 if (isAuthRequired)
-                {   
-                    foreach(KeyValuePair<string,string[]> policyPermissions in scopePolicies)
+                {
+                    foreach (KeyValuePair<string, string[]> policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key,
                             policy => policy.Requirements.Add(new IntersectionPermissions(policyPermissions.Value,
@@ -47,7 +43,7 @@ namespace Auth0Authorization
                     foreach (KeyValuePair<string, string[]> policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key, options.DefaultPolicy);
-                        
+
                     }
                 }
             });
