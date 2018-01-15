@@ -45,8 +45,7 @@ namespace Auth0AuthorizationTest
         {
             var authorizationService = BuildAuthorizationService(services => 
             {
-                services.ConfigureAuth(_domainUrl,_apiIdentifier);
-                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+                services.AddAuthorizationService(_domainUrl, _apiIdentifier, _scopePolicies, _isAuthRequired);
             });
 
             var user = new ClaimsPrincipal(
@@ -63,8 +62,7 @@ namespace Auth0AuthorizationTest
         {
             var authorizationService = BuildAuthorizationService(services => 
             {
-                services.ConfigureAuth(_domainUrl,_apiIdentifier);
-                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+                services.AddAuthorizationService(_domainUrl, _apiIdentifier, _scopePolicies, _isAuthRequired);
             });
 
             var user = new ClaimsPrincipal(
@@ -83,8 +81,7 @@ namespace Auth0AuthorizationTest
         {
             var authorizationService = BuildAuthorizationService(services => 
             {
-                services.ConfigureAuth(_domainUrl,_apiIdentifier);
-                services.AddAuthorizationPolicies(_domainUrl,_scopePolicies,_isAuthRequired);
+                services.AddAuthorizationService(_domainUrl, _apiIdentifier, _scopePolicies, _isAuthRequired);
             });
 
             var user = new ClaimsPrincipal(
