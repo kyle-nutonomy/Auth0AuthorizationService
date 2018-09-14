@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DriveLogs
+namespace Example
 {
     public struct AuthorizationPolicies
     {
