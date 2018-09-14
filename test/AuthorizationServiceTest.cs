@@ -30,9 +30,9 @@ namespace Auth0AuthorizationTest
         {
             var scopePolicies = new Dictionary<string,string[]>()
             {
-                { "Read", new string[] { "read:messages" } },
-                { "Write", new string[] { "write:messages" } },
-                { "Admin", new string[] { "read:messages", "write:messages" } }
+                { "Read", new[] { "read:messages" } },
+                { "Write", new[] { "write:messages" } },
+                { "Admin", new[] { "read:messages", "write:messages" } }
             };
             _scopePolicies = scopePolicies;
             _domainUrl = "http://test-domain.com";
@@ -50,7 +50,7 @@ namespace Auth0AuthorizationTest
 
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
-                    new Claim[] { new Claim("scope", "read:messages", null, AuthorizationService.FormatUrl(_domainUrl)) }
+                    new[] { new Claim("scope", "read:messages", null, AuthorizationService.FormatUrl(_domainUrl)) }
                 )
             );
             var allowed = await authorizationService.AuthorizeAsync(user, "Read");
