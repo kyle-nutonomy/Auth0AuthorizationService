@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System;
+using Microsoft.Extensions.Logging;
 
 namespace Auth0Authorization
 {
@@ -28,7 +28,7 @@ namespace Auth0Authorization
             {
                 if (isAuthRequired)
                 {
-                    foreach (KeyValuePair<string, string[]> policyPermissions in scopePolicies)
+                    foreach (var policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key,
                             policy => policy.Requirements.Add(new IntersectionPermissions(policyPermissions.Value,
@@ -40,7 +40,7 @@ namespace Auth0Authorization
                 {
                     // Choose which policy to passthrough when authentication is not required.
                     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAssertion(_ => true).Build();
-                    foreach (KeyValuePair<string, string[]> policyPermissions in scopePolicies)
+                    foreach (var policyPermissions in scopePolicies)
                     {
                         options.AddPolicy(policyPermissions.Key, options.DefaultPolicy);
 
@@ -53,6 +53,8 @@ namespace Auth0Authorization
         {
             private readonly string _issuer;
             private readonly IEnumerable<string> _policyScopes;
+            private readonly ILogger<IAuthorizationHandler> _logger;
+
             // field which contains permissions in jwt
             private const string PermissionsField = "scope";
 
@@ -60,11 +62,12 @@ namespace Auth0Authorization
             {
                 _policyScopes = policyScopes;
                 _issuer = issuer;
+                _logger = new LoggerFactory().AddConsole().CreateLogger<IAuthorizationHandler>();
             }
 
             protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IntersectionPermissions requirement)
             {
-
+                _logger.LogInformation(context.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 if (!context.User.HasClaim(c => c.Type == PermissionsField && c.Issuer == _issuer))
                 {   
                     return Task.CompletedTask;
@@ -85,7 +88,7 @@ namespace Auth0Authorization
 
         public static string FormatUrl(string url)
         {
-            return url + ((url[url.Length - 1] == '/') ? "" : "/");
+            return url + (url[url.Length - 1] == '/' ? "" : "/");
         }
     }
 }

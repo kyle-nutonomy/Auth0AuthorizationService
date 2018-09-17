@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>Nutonomy.Auth0AuthorizationService</PackageId>
-    <PackageVersion>1.0.4</PackageVersion>
+    <PackageVersion>1.0.5</PackageVersion>
     <Authors>Nutonomy</Authors>
     <Description>Authorization Service for configuring Auth</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
