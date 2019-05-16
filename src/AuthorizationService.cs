@@ -10,8 +10,15 @@ using Microsoft.Extensions.Logging;
 namespace Auth0Authorization
 {
     public static class AuthorizationService
-    {   
-        public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain, string apiIdentifier, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
+    {
+        public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain,
+            string audience, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
+        {
+        AddAuthorizationService(services, authorityDomain, new[] { audience }, scopePolicies, isAuthRequired);
+        }
+
+        public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain,
+            IEnumerable<string> audiences, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
         {
             var authDomainUrl = FormatUrl(authorityDomain);
             services.AddAuthentication(options =>
@@ -22,7 +29,7 @@ namespace Auth0Authorization
                 .AddJwtBearer(options =>
                 {
                     options.Authority = authDomainUrl;
-                    options.Audience = apiIdentifier;
+                    options.TokenValidationParameters.ValidAudiences = audiences;
                 });
             services.AddAuthorization(options =>
             {
