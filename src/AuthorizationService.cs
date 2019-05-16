@@ -14,7 +14,7 @@ namespace Auth0Authorization
         public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain,
             string audience, Dictionary<string, string[]> scopePolicies, bool isAuthRequired = false)
         {
-        AddAuthorizationService(services, authorityDomain, new[] { audience }, scopePolicies, isAuthRequired);
+            AddAuthorizationService(services, authorityDomain, new[] { audience }, scopePolicies, isAuthRequired);
         }
 
         public static void AddAuthorizationService(this IServiceCollection services, string authorityDomain,
@@ -76,7 +76,7 @@ namespace Auth0Authorization
             {
                 _logger.LogInformation(context.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 if (!context.User.HasClaim(c => c.Type == PermissionsField && c.Issuer == _issuer))
-                {   
+                {
                     return Task.CompletedTask;
                 }
 
