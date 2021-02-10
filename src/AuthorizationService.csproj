@@ -1,18 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <PackageId>Nutonomy.Auth0AuthorizationService</PackageId>
-    <PackageVersion>1.1.0</PackageVersion>
-    <Authors>Nutonomy</Authors>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <PackageId>Motional.Auth0AuthorizationService</PackageId>
+    <PackageVersion>1.2.0</PackageVersion>
+    <Authors>Motional</Authors>
     <Description>Authorization Service for configuring Auth</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>First release</PackageReleaseNotes>
-    <Copyright>Copyright 2017 (c) nuTonomy. All rights reserved.</Copyright>
+    <Copyright>Copyright 2020 (c) Motional. All rights reserved.</Copyright>
     <PackageTags>auth0 authorization</PackageTags>
-    <PackageProjectUrl>https://github.com/mayqmh/Auth0AuthorizationService</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/kyle-nutonomy/Auth0AuthorizationService</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.12" />
   </ItemGroup>
 </Project>

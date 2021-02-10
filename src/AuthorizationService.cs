@@ -69,7 +69,7 @@ namespace Auth0Authorization
             {
                 _policyScopes = policyScopes;
                 _issuer = issuer;
-                _logger = new LoggerFactory().AddConsole().CreateLogger<IAuthorizationHandler>();
+                _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<IAuthorizationHandler>();
             }
 
             protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IntersectionPermissions requirement)
